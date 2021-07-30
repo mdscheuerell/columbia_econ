@@ -12,7 +12,7 @@ dir_data <- here("data")
 ## read raw temp data
 temp_raw <- read_csv(file.path(dir_data, "adultpass.csv"))
 
-## summarize by year
+## summarize temp by year for 3/1 thru 6/30
 temp_raw %>%
   filter(year >= 1970 & year <= 2020) %>%
   filter(mo >= 3 & mo <= 6) %>%
@@ -25,12 +25,27 @@ temp_raw %>%
 ## read raw flow data
 flow_raw <- read_csv(file.path(dir_data, "BON_flow_raw.csv"))
 
+## summarize flow by year for 3/1 thru 6/30
 flow_raw %>%
-  #select(-mm_dd)
   pivot_longer(!mm_dd,
                names_to = "year",
                values_to = "flow") %>%
   group_by(year) %>%
   summarise(flow_CFS = round(mean(flow), 1)) %>%
   write_csv(file.path(dir_data, "BON_flow.csv"))
+
+
+## read raw PDO data
+pdo_raw <- read_csv(file.path(dir_data, "pdo_data_raw.csv"))
+
+## summarize PDO by year
+pdo_raw %>%
+  extract(year_month, c("year", "month"), "([0-9]{4})([0-9]{2})") %>%
+  filter(year >= 1970 & year <= 2020) %>%
+  group_by(year) %>%
+  summarise(pdo = mean(value)) %>%
+  write_csv(file.path(dir_data, "PDO.csv"))
+
+
+
 

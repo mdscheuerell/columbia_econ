@@ -43,7 +43,7 @@ pdo_raw %>%
   extract(year_month, c("year", "month"), "([0-9]{4})([0-9]{2})") %>%
   filter(year >= 1970 & year <= 2020) %>%
   group_by(year) %>%
-  summarise(pdo = mean(value)) %>%
+  summarise(pdo = round(mean(value), 2)) %>%
   write_csv(file.path(dir_data, "PDO.csv"))
 
 

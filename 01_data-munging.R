@@ -31,7 +31,7 @@ flow_raw %>%
                names_to = "year",
                values_to = "flow") %>%
   group_by(year) %>%
-  summarise(flow_CFS = round(mean(flow), 1)) %>%
+  summarise(flow_kcfs = round(mean(flow), 1)) %>%
   write_csv(file.path(dir_data, "BON_flow.csv"))
 
 

@@ -1,0 +1,21 @@
+There are 3 files with environmental data
+
+1) BON_temp.csv
+
+This is the mean water temperature (Celsius) measured at Bonneville Dam for the period March 1 through June 30 from 1975 through 2020, with the exception of 1981 and 1982, which are missing. Note that these data come courtesy of Chris Van Holmes, as part of Columbia Basin Research's Data Access in Real Time (DART).
+
+http://www.cbr.washington.edu/dart
+
+
+2) BON_flow.csv
+
+This is the flow (thousands of cubic feet per second) measured at Bonneville Dam for the period March 1 through June 30 from 1970 through 2020. These data come courtesy of Columbia Basin Research's Data Access in Real Time (DART).
+
+http://www.cbr.washington.edu/dart
+
+
+3) PDO.csv
+
+This is the mean annual Pacific Decadal Oscillation (dimensionless) from 1970 through 2020. The raw data come from NOAA's National Centers for Environmental Information.
+
+https://www.ncdc.noaa.gov/teleconnections/pdo/

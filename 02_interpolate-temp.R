@@ -5,6 +5,7 @@
 ## load libraries
 library(tidyverse)
 library(here)
+library(MARSS)
 
 ## set data directory
 dir_data <- here("data")
@@ -12,7 +13,7 @@ dir_data <- here("data")
 ## read raw temp data
 temp_raw <- read_csv(file.path(dir_data, "temp_all_dams.csv"))
 
-
+## reformatted data
 temp_re <- temp_raw %>%
   pivot_longer(cols = `2020`:`1970`,
                names_to = "year",
@@ -21,16 +22,56 @@ temp_re <- temp_raw %>%
               values_from = temp) %>%
   arrange(year, dam)
   
+## number of years of data
 n_years <- temp_re %>%
   select(year) %>%
   unique() %>%
   nrow()
 
-ZZ <- matrix(0, nrow(temp_re), ncol(temp_re) - 2)
+## number of days
+n_obs <- nrow(temp_re)
 
-for(i = 1:n_years) {
-  
-  
-  
+## ZZ matrix to map 4 dams onto single state
+ZZ <- matrix(0, nrow(temp_re), n_years)
+for(i in 1:n_years) {
+  ZZ[seq(4) + 4 * (i - 1), i] <- rep(1, 4)
 }
   
+BB <- diag(n_years)
+
+UU <- matrix("bias", n_years, 1)
+
+QQ <- matrix(list(0), n_years, n_years)
+diag(QQ) <- "env"
+
+AA <- matrix(as.character(seq(n_years)), n_years, 1)
+
+RR <- matrix(list(0), n_obs, n_obs)
+diag(RR) <- "obs"
+
+
+## fit biased RW's to each year
+mod_list <- list(
+  B = BB,
+  U = UU,
+  Q = QQ,
+  Z = ZZ,
+  A = AA,
+  R = RR
+)
+
+inits_list <- list(
+  x0 = 4
+)
+
+## data for fitting
+yy <- temp_re %>%
+  select(-c("dam", "year")) %>%
+  as.matrix()
+
+## fit the model
+mod_fit <- MARSS(yy, model = mod_list)
+
+
+
+

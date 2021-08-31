@@ -44,11 +44,11 @@ UU <- matrix("bias", n_years, 1)
 QQ <- matrix(list(0), n_years, n_years)
 diag(QQ) <- "env"
 
-AA <- matrix(as.character(seq(n_years)), n_years, 1)
+AA <- matrix(0, n_obs, 1)
 
-RR <- matrix(list(0), n_obs, n_obs)
-diag(RR) <- "obs"
-
+# RR <- matrix(list(0), n_obs, n_obs)
+# diag(RR) <- "obs"
+RR <- diag(0.01, n_obs, n_obs )
 
 ## fit biased RW's to each year
 mod_list <- list(
@@ -64,13 +64,14 @@ inits_list <- list(
   x0 = 4
 )
 
-## data for fitting
+## data for fitting; subtract mean to aid fitting
 yy <- temp_re %>%
   select(-c("dam", "year")) %>%
-  as.matrix()
+  apply(1, function(x) { x - mean(x, na.rm = TRUE) }) %>%
+  t()
 
 ## fit the model
-mod_fit <- MARSS(yy, model = mod_list)
+mod_fit <- MARSS(yy, model = mod_list, inits = inits_list)
 
 
 

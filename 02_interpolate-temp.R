@@ -46,9 +46,8 @@ diag(QQ) <- "env"
 
 AA <- matrix(0, n_obs, 1)
 
-# RR <- matrix(list(0), n_obs, n_obs)
-# diag(RR) <- "obs"
-RR <- diag(0.01, n_obs, n_obs )
+RR <- matrix(list(0), n_obs, n_obs)
+diag(RR) <- "obs"
 
 ## fit biased RW's to each year
 mod_list <- list(

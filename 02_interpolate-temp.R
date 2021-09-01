@@ -37,15 +37,20 @@ for(i in 1:n_years) {
   ZZ[seq(4) + 4 * (i - 1), i] <- rep(1, 4)
 }
   
+## AR(1) terms (= 1)
 BB <- diag(n_years)
 
+## slope (bias)
 UU <- matrix("bias", n_years, 1)
 
+## process error variance; IID
 QQ <- matrix(list(0), n_years, n_years)
 diag(QQ) <- "env"
 
-AA <- matrix(0, n_obs, 1)
+## offsets for obs
+AA <- matrix(as.character(seq(n_obs)), n_obs, 1)
 
+## obs error variance; IID
 RR <- matrix(list(0), n_obs, n_obs)
 diag(RR) <- "obs"
 
@@ -66,12 +71,20 @@ inits_list <- list(
 ## data for fitting; subtract mean to aid fitting
 yy <- temp_re %>%
   select(-c("dam", "year")) %>%
-  apply(1, function(x) { x - mean(x, na.rm = TRUE) }) %>%
-  t()
+  as.matrix()
 
 ## fit the model
-mod_fit <- MARSS(yy, model = mod_list, inits = inits_list)
+mod_fit <- MARSS(yy, model = mod_list, inits = inits_list, method = "BFGS")
 
+## calculate annual means
+temp_mean <- mod_fit$states %>%
+  apply(1, mean) %>%
+  round(2)
 
+## df with year and temp
+tbl_temps <- data.frame(year = seq(1970, 2020),
+                        temp = temp_mean,
+                        row.names = NULL)
 
-
+## write df to file
+write.csv(tbl_temps, file.path(dir_data, "mean_annual_temp_index.csv"))

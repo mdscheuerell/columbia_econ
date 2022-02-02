@@ -7,11 +7,8 @@ library(tidyverse)
 library(here)
 library(MARSS)
 
-## set data directory
-dir_data <- here("data")
-
 ## read raw temp data
-temp_raw <- read_csv(file.path(dir_data, "temp_all_dams.csv"))
+temp_raw <- read_csv(here("data", "temp_all_dams.csv"))
 
 ## reformatted data
 temp_re <- temp_raw %>%
@@ -87,4 +84,4 @@ tbl_temps <- data.frame(year = seq(1970, 2020),
                         row.names = NULL)
 
 ## write df to file
-write.csv(tbl_temps, file.path(dir_data, "mean_annual_temp_index.csv"))
+write.csv(tbl_temps, here("data", "mean_annual_temp_index.csv"))

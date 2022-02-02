@@ -6,11 +6,8 @@
 library(tidyverse)
 library(here)
 
-## set data directory
-dir_data <- here("data")
-
 ## read raw temp data
-temp_raw <- read_csv(file.path(dir_data, "adultpass.csv"))
+temp_raw <- read_csv(here("data", "adultpass.csv"))
 
 ## summarize temp by year for 3/1 thru 6/30
 temp_raw %>%
@@ -23,7 +20,7 @@ temp_raw %>%
 
 
 ## read raw flow data
-flow_raw <- read_csv(file.path(dir_data, "BON_flow_raw.csv"))
+flow_raw <- read_csv(here("data", "BON_flow_raw.csv"))
 
 ## summarize flow by year for 3/1 thru 6/30
 flow_raw %>%
@@ -36,7 +33,7 @@ flow_raw %>%
 
 
 ## read raw PDO data
-pdo_raw <- read_csv(file.path(dir_data, "pdo_data_raw.csv"))
+pdo_raw <- read_csv(here("data", "pdo_data_raw.csv"))
 
 ## summarize PDO by year
 pdo_raw %>%

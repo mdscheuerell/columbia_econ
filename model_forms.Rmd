@@ -1,7 +1,7 @@
 ---
 title: "Some thoughts on model forms"
 author: "Mark Scheuerell"
-date: "3/14/2022"
+date: "14 March 2022"
 output: pdf_document
 documentclass: article
 geometry: margin=1in
@@ -20,68 +20,105 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The total return of adult salmon of species $i$ in year $t$, $Y^A_{i,t}$, is the sum of natural- and hatchery-origin fish, $N^A_{i,t}$ and $H^A_{i,t}$, respectively, such that
 
-$$
+\begin{equation}
 Y^A_{i,t} = N^A_{i,t} + H^A_{i,t}.
-$$
+\end{equation}
 
 ### Natural-origin fish
 
-The number of natural-origin adults returning in some year $t$ is the sum of age-specific returns of fish over previous years, the range of which depends on the species and location.
+The number of natural-origin adults returning in some year $t$ is the sum of age-specific returns of fish over previous years, the range of which depends on the species and location. In any given year $t$, adult spawners produce some number of offspring that survive to return as adult "recruits" over the following years $(R^A_{i,t})$. This process is generally assumed to be density dependent and affected by the environment $(E_t)$, such that 
 
-In any given year $t$, adult spawners produce some number of offspring that survive to return as adult "recruits" over the following years $R^A_{i,t}$
-
-This process is generally assumed to be density dependent and affected by the environment $(E_t)$, such that 
-
-$$
+\begin{equation}
 R^A_{i,t} = f ( N^A_{i,t}, E_t ) \\
-$$
+\end{equation}
 
-For example, a Ricker model is given by
+For example, one common choice for $f$ is a Ricker model defined as
 
-$$
-R_t = \alpha_t S_t \exp(–bS_t + w_t),
-$$
+\begin{equation}
+R_t = \alpha_{i,t} S_{i,t} \exp(-\beta S_{i,t} + w_{i,t}),
+\end{equation}
 
 where $\alpha_t$ is the intrinsic rate of productivity (spawners per spawner) absent density-dependent effects, $b$ is the per capita strength of density dependence, and $w_t$ is some stochastic effect of the environment. In log-space the model becomes
 
-$$
-\log(R_t) = \log(S_t) + a_t – bS_t + w_t.
-$$
+\begin{equation} \label{log_ricker}
+\log(R_t) = \log (\alpha_{i,t}) + \log(S_{i,t}) - \beta S_{i,t} + w_{i,t}.
+\end{equation}
 	
-where $a_t = \log \alpha_t$.
+Furthermore, the intrinsic rate of productivity is often assumed to be a function of the environment, where
 
-Specifically,
+\begin{equation}
+\log (\alpha_{i,t}) = \beta_0 + \sum_{i=1}^{M} \beta_{X,i} \ X_{i,t+h}
+\end{equation}
 
-$$a_t = \bar{a} + \sum_{i=1}^{M} c_{i,t} \ X_{i,t+h} $$
+Here, $\beta_0$ is the log of the underlying mean productivity, and $\beta_{i}$ is the effect of a covariate $i$ at time $t$ $(X_{i,t+h})$. 
 
-Here $\bar{a}$ is the underlying mean productivity, and $c_{i,t}$ is the effect of covariate $i$ at time $t$, $X_{i,t+h}$. 
+The estimated number of fish of age $a$ returning in year $t$ $(N_{a,t})$ is then product of the total number of brood-year recruits in year $t - a$ and the proportion of mature fish from that brood year that returned to spawn at age $a$ $(p_{a,t-a})$, such that
 
-The estimated number of fish of age $a$ returning in year $t$ $(N_{a,t})$ is then product of the total number of brood-year recruits in year $t – a$ and the proportion of mature fish from that brood year that returned to spawn at age $a$ $(p_{a,t-a})$, such that
-
-$$
-N^A_{a,t} = R^A_{t-a} \ p_{a,t-a}.
-$$
+\begin{equation}
+N^A_{i,a,t} = R^A_{i,t-a} \ p_{i,a,t-a}.
+\end{equation}
 
 The total number of natural-origin adults returning in some year $t$ is then the sum of age-specific returns of fish over previous years, whereby
 
-$$
-N^A_{t} = \sum_{a} N^A_{a,t}.
-$$
+\begin{equation}
+N^A_{i,t} = \sum_{a} N^A_{i,a,t}.
+\end{equation}
 
 
 ### Hatchery-origin fish
 
-Unlike natural-origin fish, the number of hatchery-origin adults in year $t$ $H^A_{i,t}$ is disconnected from the number of hatchery-origin adults in some years prior, and instead is merely the total number of hatchery-origin juveniles released some $k$ years prior $H^J_{i,t-k}$ times their juvenile-to-adult survival,
+Unlike natural-origin fish, the number of hatchery-origin adults in year $t$ $(H^A_{i,t})$ is disconnected from the number of hatchery-origin adults in some years prior, and instead is merely the total number of hatchery-origin juveniles released some $k$ years prior $H^J_{i,t-k}$ times their juvenile-to-adult survival
 
-$$
+\begin{equation} \label{H_sar}
 H^A_{i,t} = \sum_{k = 1}^K s^H_{i,t-k} H^J_{i,t-k}.
-$$
+\end{equation}
 
 ### Juvenile-to-adult survival
 
-Furthermore, the juvenile-to-adult survival is typically thought to be a function of the river environment during the time the juveniles are migrating to sea $(E^R_{i, t-k})$, as well as conditions in the ocean during their time at sea $(\sum E^O_{i, t-k})$, whereby
+Juvenile-to-adult survival is typically thought to be a function of the river environment during the time the juveniles are migrating to sea $(E^R_{i, t-k})$, as well as conditions in the ocean during their time at sea $(\sum E^O_{i, t-k})$, whereby
 
-$$
-\text{logit} (s^H_{i,t-k}) = \sum_{k = 1}^K (\beta_k E^R_{i, t-k} + \gamma_k E^O_{i, t-k}).
-$$
+\begin{equation}
+\text{logit} (s^H_{i,t-k}) = \sum_{k = 1}^K (\beta_{R,k} E^R_{i, t-k} + \beta_{O,k} E^O_{i, t-k}).
+\end{equation}
 
+## Simplifying assumptions
+
+Several simplifying assumptions are necessary here given the lack of and species- and age-specific data. First, we can assume that there is a single (average) age of adults and therefore $k$ is fixed at a single value for each species. If so, then equation (\ref{log_ricker}) can be rewritten in terms of total adults in return year $t$ as a function of the total number of returning adults $k$ years earlier:
+
+\begin{equation} \label{N_ricker}
+\log(N^A_{i,t}) = \log (\alpha_{i,t}) + \log(N^A_{i,t-k}) - \beta_N N^A_{i,t-k} + w_{i,t}.
+\end{equation}
+
+We can use the same assumption to simplify the model for hatchery-origin adults, such that equation (\ref{H_sar}) becomes
+
+\begin{equation} \label{H_sar_simple}
+H^A_{i,t} = s^H_{i,t-k} H^J_{i,t-k}.
+\end{equation}
+
+In log-space, the number of hatchery-origin adults is then
+
+\begin{equation} \label{H_sar_simple_log}
+\log (H^A_{i,t}) = \log (s^H_{i,t-k}) + \log (H^J_{i,t-k}).
+\end{equation}
+
+Combining equations (\ref{N_ricker}) and (\ref{H_sar_simple_log}) gives
+
+\begin{equation} \label{full_model}
+\log(N^A_{i,t}) = \left[ \log (\alpha_{i,t}) + \log(N^A_{i,t-k}) - \beta_N N^A_{i,t-k} \right] + \left[ \log (s^H_{i,t-k}) + \log (H^J_{i,t-k}) \right] + w_{i,t}
+\end{equation}
+	
+with
+
+\begin{equation} \label{cov_effects}
+\log (\alpha_{i,t}) = \beta_0 + \sum_{i=1}^{M} \beta_{X,i} \ X_{i,t-kh}.
+\end{equation}
+
+Here we can make the second assumption that the smolt-to-adult survival (SAR) of hatchery fish is known from independent studies and therefore fix the $\log (s^H_{i,t-k})$ term in equation (\ref{full_model}) rather than estimate it.
+
+Lastly, we can write out the effects of flow $(F)$, ocean conditions $(O)$ and spending $(S)$ more explicitly, such that equation (\ref{cov_effects}) becomes
+
+\begin{equation} \label{cov_effects_full}
+\log (\alpha_{i,t}) = \beta_0 + \beta_{F,i} F_{i,t-l} + \beta_{O,i} O_{i,t-k} + \beta_{S,i} S_{i,t-m}.
+\end{equation}
+
+Importantly, here the covariates are not log-transformed, as it's not clear to me why they should be given their presumed effect on productivity.

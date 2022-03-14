@@ -1,0 +1,30 @@
+---
+title: "Some thoughts on model forms"
+author: "Mark Scheuerell"
+date: "3/14/2022"
+output: pdf_document
+documentclass: article
+geometry: margin=1in
+linestretch: 1.1
+fontsize: 12pt
+header-includes:
+  - \usepackage{lineno}
+  - \linenumbers
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Background
+
+The total return of adult salmon of species $i$ in year $t$, $Y^A_{i,t}$, is the sum of natural- and hatchery-origin fish, $N^A_{i,t}$ and $H^A_{i,t}$, respectively, such that
+
+$$
+Y^A_{i,t} = N^A_{i,t} + H^A_{i,t}.
+$$
+Unlike natural-origin fish, the number of hatchery-origin adults in year $t$ $H^A_{i,t}$ is disconnected from the number of hatchery-origin adults in some years prior, and instead is merely the total number of hatchery-origin juveniles released some $k$ years prior $H^J_{i,t-k}$ times their juvenile-to-adult survival,
+
+$$
+H^A_{i,t} = \sum_{k = 1}^K s^H_{i,t-k} H^J_{i,t-k}.
+$$

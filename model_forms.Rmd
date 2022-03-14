@@ -23,8 +23,65 @@ The total return of adult salmon of species $i$ in year $t$, $Y^A_{i,t}$, is the
 $$
 Y^A_{i,t} = N^A_{i,t} + H^A_{i,t}.
 $$
+
+### Natural-origin fish
+
+The number of natural-origin adults returning in some year $t$ is the sum of age-specific returns of fish over previous years, the range of which depends on the species and location.
+
+In any given year $t$, adult spawners produce some number of offspring that survive to return as adult "recruits" over the following years $R^A_{i,t}$
+
+This process is generally assumed to be density dependent and affected by the environment $(E_t)$, such that 
+
+$$
+R^A_{i,t} = f ( N^A_{i,t}, E_t ) \\
+$$
+
+For example, a Ricker model is given by
+
+$$
+R_t = \alpha_t S_t \exp(–bS_t + w_t),
+$$
+
+where $\alpha_t$ is the intrinsic rate of productivity (spawners per spawner) absent density-dependent effects, $b$ is the per capita strength of density dependence, and $w_t$ is some stochastic effect of the environment. In log-space the model becomes
+
+$$
+\log(R_t) = \log(S_t) + a_t – bS_t + w_t.
+$$
+	
+where $a_t = \log \alpha_t$.
+
+Specifically,
+
+$$a_t = \bar{a} + \sum_{i=1}^{M} c_{i,t} \ X_{i,t+h} $$
+
+Here $\bar{a}$ is the underlying mean productivity, and $c_{i,t}$ is the effect of covariate $i$ at time $t$, $X_{i,t+h}$. 
+
+The estimated number of fish of age $a$ returning in year $t$ $(N_{a,t})$ is then product of the total number of brood-year recruits in year $t – a$ and the proportion of mature fish from that brood year that returned to spawn at age $a$ $(p_{a,t-a})$, such that
+
+$$
+N^A_{a,t} = R^A_{t-a} \ p_{a,t-a}.
+$$
+
+The total number of natural-origin adults returning in some year $t$ is then the sum of age-specific returns of fish over previous years, whereby
+
+$$
+N^A_{t} = \sum_{a} N^A_{a,t}.
+$$
+
+
+### Hatchery-origin fish
+
 Unlike natural-origin fish, the number of hatchery-origin adults in year $t$ $H^A_{i,t}$ is disconnected from the number of hatchery-origin adults in some years prior, and instead is merely the total number of hatchery-origin juveniles released some $k$ years prior $H^J_{i,t-k}$ times their juvenile-to-adult survival,
 
 $$
 H^A_{i,t} = \sum_{k = 1}^K s^H_{i,t-k} H^J_{i,t-k}.
 $$
+
+### Juvenile-to-adult survival
+
+Furthermore, the juvenile-to-adult survival is typically thought to be a function of the river environment during the time the juveniles are migrating to sea $(E^R_{i, t-k})$, as well as conditions in the ocean during their time at sea $(\sum E^O_{i, t-k})$, whereby
+
+$$
+\text{logit} (s^H_{i,t-k}) = \sum_{k = 1}^K (\beta_k E^R_{i, t-k} + \gamma_k E^O_{i, t-k}).
+$$
+

@@ -101,10 +101,10 @@ In log-space, the number of hatchery-origin adults is then
 \log (H^A_{i,t}) = \log (s^H_{i,t-k}) + \log (H^J_{i,t-k}).
 \end{equation}
 
-Combining equations (\ref{N_ricker}) and (\ref{H_sar_simple_log}) gives
+Now we can rewrite equation (1) in terms of equations (\ref{N_ricker}) and (\ref{H_sar_simple_log}), such that
 
 \begin{equation} \label{full_model}
-\log(N^A_{i,t}) = \left[ \log (\alpha_{i,t}) + \log(N^A_{i,t-k}) - \beta_N N^A_{i,t-k} \right] + \left[ \log (s^H_{i,t-k}) + \log (H^J_{i,t-k}) \right] + w_{i,t}
+\log(Y^A_{i,t}) = \left[ \log (\alpha_{i,t}) + \log(N^A_{i,t-k}) - \beta_N N^A_{i,t-k} \right] + \left[ \log (s^H_{i,t-k}) + \log (H^J_{i,t-k}) \right] + w_{i,t}
 \end{equation}
 	
 with
@@ -113,12 +113,26 @@ with
 \log (\alpha_{i,t}) = \beta_0 + \sum_{i=1}^{M} \beta_{X,i} \ X_{i,t-kh}.
 \end{equation}
 
-Here we can make the second assumption that the smolt-to-adult survival (SAR) of hatchery fish is known from independent studies and therefore fix the $\log (s^H_{i,t-k})$ term in equation (\ref{full_model}) rather than estimate it.
+As written, we cannot use equation (\ref{full_model}) because we do not know the number of natural-origin adults in any given year. However, if we are willing to make a second assumption that the smolt-to-adult survival (SAR) of hatchery fish is known from independent studies, and therefore we can fix the $\log (s^H_{i,t-k})$ term in equation (\ref{full_model}) rather than estimate it, then we can rewrite equation (\ref{full_model}). Specifically, we have
+
+\begin{multline} \label{full_model_2}
+\log(Y^A_{i,t}) = \log (\alpha_{i,t}) + \log(Y^A_{i,t-k} - s^H_{i,t-k} H^J_{i,t-k}) - \beta_N (Y^A_{i,t-k} - s^H_{i,t-k} H^J_{i,t-k}) \\
++ \log (s^H_{i,t-k}) + \log (H^J_{i,t-k})  + w_{i,t}
+\end{multline}
+
 
 Lastly, we can write out the effects of flow $(F)$, ocean conditions $(O)$ and spending $(S)$ more explicitly, such that equation (\ref{cov_effects}) becomes
 
-\begin{equation} \label{cov_effects_full}
-\log (\alpha_{i,t}) = \beta_0 + \beta_{F,i} F_{i,t-l} + \beta_{O,i} O_{i,t-k} + \beta_{S,i} S_{i,t-m}.
-\end{equation}
+\begin{multline} \label{full_model_3}
+\log(Y^A_{i,t}) = \beta_0 + \beta_{F,i} F_{i,t-l} + \beta_{O,i} O_{i,t-k} + \beta_{S,i} S_{i,t-m} \\
++ \log(Y^A_{i,t-k} - s^H_{i,t-k} H^J_{i,t-k}) - \beta_N (Y^A_{i,t-k} - s^H_{i,t-k} H^J_{i,t-k}) \\
++ \log (s^H_{i,t-k}) + \log (H^J_{i,t-k})  + w_{i,t}
+\end{multline}
 
-Importantly, here the covariates are not log-transformed, as it's not clear to me why they should be given their presumed effect on productivity.
+
+## Caveats
+
+* The covariates in equation (\label{cov_effects_full}) are not log-transformed, as it's not clear to me why they should be given their presumed effect on productivity.
+
+* The effect of spending $(\beta_{S,i})$ will be biased low because it necessarily includes the effect of hatchery releases, which we cannot separate out here.
+
